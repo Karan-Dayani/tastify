@@ -5,10 +5,11 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 import { Oswald } from "next/font/google";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 const oswald = Oswald({ subsets: ["latin"] });
 
 const Header = () => {
-  const { data: session } = useSession({});
+  const { data: session } = useSession();
   return (
     <div
       className={`${oswald.className} h-20 bg-secondary text-primary flex items-center px-10`}
@@ -26,13 +27,13 @@ const Header = () => {
           <li>
             <Link href="/profile" className="hover:opacity-70">
               {session ? (
-                <picture>
-                  <img
-                    src={session?.user?.image}
-                    alt="user-img"
-                    className="w-9 rounded-full"
-                  />
-                </picture>
+                <Image
+                  src={session?.user?.image}
+                  alt="user-img"
+                  width={40}
+                  height={20}
+                  className="w-9 rounded-full"
+                />
               ) : (
                 <AccountCircleIcon fontSize="large" />
               )}

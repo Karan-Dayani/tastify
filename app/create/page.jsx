@@ -2,6 +2,7 @@ import React from "react";
 import { getServerSession } from "next-auth";
 import { options } from "../api/auth/[...nextauth]/options";
 import { redirect } from "next/navigation";
+import RecipeForm from "../(components)/createForm";
 
 const CreateRecipePage = async () => {
   const session = await getServerSession(options);
@@ -11,9 +12,11 @@ const CreateRecipePage = async () => {
   }
 
   return (
-    <div>
-      <h1>CreatePage</h1>
-      <p>Hello, {session?.user?.name}</p>
+    <div className="py-8">
+      <h1 className="text-secondary text-4xl text-center">Add Your Dish</h1>
+      <div className=" w-screen flex justify-center p-5">
+        <RecipeForm />
+      </div>
     </div>
   );
 };
