@@ -1,12 +1,63 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import firebase from "firebase/compat/app";
 import "firebase/compat/storage";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import { useSession } from "next-auth/react";
+import { redirect, useRouter } from "next/navigation";
 
 const RecipeForm = () => {
-  const [image, setImage] = useState();
+  const [image, setImage] = useState("");
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!session?.user?.name) {
+      redirect("/");
+    }
+  });
+
+  //* formdata setup
+  const emptyFormData = {
+    name: "",
+    user: `${session?.user?.name}`,
+    ingredients: "",
+    recipe: "",
+    imageUrl: "",
+    likes: 0,
+  };
+  const [formData, setFormData] = useState(emptyFormData);
+
+  const handleFormChange = (e) => {
+    const value = e.target.value;
+    const name = e.target.name;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  console.log(formData);
+
+  const handlePost = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("api/Recipes", {
+        method: "POST",
+        body: JSON.stringify({ formData }),
+        "content-type": "application/json",
+      });
+      if (!res.ok) {
+        throw new Error("Failed to create recipe");
+      }
+      router.refresh();
+      router.push("/");
+    } catch (error) {
+      console.log("Error Posting");
+    }
+  };
 
   //* FireBase Config
   const firebaseConfig = {
@@ -33,6 +84,10 @@ const RecipeForm = () => {
       fileRef.put(selectedFile).then((snapshot) => {
         snapshot.ref.getDownloadURL().then((downloadURL) => {
           setImage(downloadURL);
+          setFormData((prev) => ({
+            ...prev,
+            imageUrl: downloadURL,
+          }));
           console.log(downloadURL);
         });
       });
@@ -46,8 +101,10 @@ const RecipeForm = () => {
       .delete()
       .then(() => {
         setImage("");
-        // const fileInput = document.querySelector('input[type="file"]');
-        // fileInput.value = "";
+        setFormData((prev) => ({
+          ...prev,
+          imageUrl: "",
+        }));
       })
       .catch((error) => {
         console.error("Error removing image:", error);
@@ -62,6 +119,8 @@ const RecipeForm = () => {
             <label className="text-2xl">Name</label>
             <input
               type="text"
+              name="name"
+              onChange={handleFormChange}
               className="w-full border border-secondary rounded-md"
             />
           </div>
@@ -69,6 +128,8 @@ const RecipeForm = () => {
             <label className="text-2xl">Ingredients</label>
             <textarea
               type="text"
+              name="ingredients"
+              onChange={handleFormChange}
               className="w-full h-40 border border-secondary rounded-md"
             />
           </div>
@@ -76,6 +137,8 @@ const RecipeForm = () => {
             <label className="text-2xl">Recipe</label>
             <textarea
               type="text"
+              name="recipe"
+              onChange={handleFormChange}
               className="w-full h-40 border border-secondary rounded-md"
             />
           </div>
@@ -118,7 +181,10 @@ const RecipeForm = () => {
           />
         )}
         <div className="w-full text-center lg:text-end">
-          <button className="bg-secondary text-primary w-fit px-3 py-1 rounded-md hover:bg-opacity-80">
+          <button
+            onClick={handlePost}
+            className="bg-secondary text-primary w-fit px-3 py-1 rounded-md hover:bg-opacity-80"
+          >
             Post
           </button>
         </div>
