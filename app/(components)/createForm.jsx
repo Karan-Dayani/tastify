@@ -62,11 +62,11 @@ const RecipeForm = () => {
   //* FireBase Config
   const firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY,
-    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-    projectId: process.env.FIREBASE_PROJECT_ID,
+    authDomain: "unified-firefly-322314.firebaseapp.com",
+    projectId: "unified-firefly-322314",
     storageBucket: "unified-firefly-322314.appspot.com",
-    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-    appId: process.env.FIREBASE_APP_ID,
+    messagingSenderId: "407213938594",
+    appId: "1:407213938594:web:e56db0e4c9fca5680304fb",
   };
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
