@@ -1,6 +1,6 @@
 export const getRecipes = async () => {
   try {
-    const res = await fetch("http://localhost:3000/api/Recipes", {
+    const res = await fetch("https://tastify-one.vercel.app/api/Recipes", {
       cache: "no-store",
     });
     return res.json();
@@ -11,9 +11,12 @@ export const getRecipes = async () => {
 
 export const getUserRecipes = async (mail) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/UserRecipes/${mail}`, {
-      cache: "no-store",
-    });
+    const res = await fetch(
+      `https://tastify-one.vercel.app/api/UserRecipes/${mail}`,
+      {
+        cache: "no-store",
+      }
+    );
     return res.json();
   } catch (error) {
     console.log("Failed to get Recipes", error);

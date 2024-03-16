@@ -29,9 +29,12 @@ const RecipeList = ({ recipes }) => {
   }
 
   const handleDelete = async (id, imgUrl) => {
-    const res = await fetch(`http://localhost:3000/api/Recipes/${id}`, {
-      method: "DELETE",
-    });
+    const res = await fetch(
+      `https://tastify-one.vercel.app/api/Recipes/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
     if (res.ok) {
       router.refresh();
     }
