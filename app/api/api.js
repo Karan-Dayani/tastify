@@ -8,3 +8,14 @@ export const getRecipes = async () => {
     console.log("Failed to get Recipes", error);
   }
 };
+
+export const getUserRecipes = async (mail) => {
+  try {
+    const res = await fetch(`http://localhost:3000/api/UserRecipes/${mail}`, {
+      cache: "no-store",
+    });
+    return res.json();
+  } catch (error) {
+    console.log("Failed to get Recipes", error);
+  }
+};

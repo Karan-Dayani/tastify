@@ -22,6 +22,7 @@ const RecipeForm = () => {
   const emptyFormData = {
     name: "",
     user: `${session?.user?.name}`,
+    mail: `${session?.user?.email}`,
     ingredients: "",
     recipe: "",
     imageUrl: "",
