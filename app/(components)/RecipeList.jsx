@@ -5,6 +5,7 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/storage";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const formatDate = (createdAt) => {
   if (!createdAt) return "";
@@ -48,23 +49,25 @@ const RecipeList = ({ recipes }) => {
       <div>
         {recipes?.map((recipe, i) => (
           <div key={i} className="flex items-center justify-between">
-            <div className="flex gap-5 lg:gap-9 items-center py-5">
-              <div>
-                <Image
-                  src={recipe.imageUrl}
-                  height={150}
-                  width={150}
-                  alt="image"
-                  className="rounded-sm w-28 h-20 object-cover"
-                />
+            <Link href={`recipes/${recipe._id}`}>
+              <div className="flex gap-5 lg:gap-9 items-center py-5">
+                <div>
+                  <Image
+                    src={recipe.imageUrl}
+                    height={150}
+                    width={150}
+                    alt="image"
+                    className="rounded-sm w-28 h-20 object-cover"
+                  />
+                </div>
+                <div>
+                  <h1 className="text-xl text-secondary">{recipe.name}</h1>
+                  <p className="text-md text-secondary">
+                    Date: {formatDate(recipe.createdAt)}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h1 className="text-xl text-secondary">{recipe.name}</h1>
-                <p className="text-md text-secondary">
-                  Date: {formatDate(recipe.createdAt)}
-                </p>
-              </div>
-            </div>
+            </Link>
             <div>
               <button onClick={() => handleDelete(recipe._id, recipe.imageUrl)}>
                 <DeleteIcon className="cursor-pointer text-red-500" />
