@@ -8,7 +8,7 @@ const RecipeCards = ({ recipes }) => {
       <div className="flex flex-wrap justify-center gap-5 lg:gap-48">
         {recipes?.map((recipe, i) => (
           <div key={i}>
-            <Link href="#">
+            <Link href={`recipes/${recipe._id}`}>
               <div className="flex flex-col gap-2">
                 {recipe.imageUrl && (
                   <Image
@@ -21,7 +21,7 @@ const RecipeCards = ({ recipes }) => {
                 )}
                 <div>
                   <h1 className="text-xl font-bold">{recipe.name}</h1>
-                  <p className="text-base">Created by {recipe.user}</p>
+                  <p className="text-base">Posted by {recipe.user}</p>
                 </div>
               </div>
             </Link>
