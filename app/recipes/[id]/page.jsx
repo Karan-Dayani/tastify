@@ -1,15 +1,31 @@
-import { getRecipe } from "@/app/api/api";
+import { getRecipe, getUser } from "@/app/api/api";
 import Image from "next/image";
 import React from "react";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
+import { getServerSession } from "next-auth";
+import { options } from "@/app/api/auth/[...nextauth]/options";
+import Like from "@/app/(components)/Like";
+import User from "@/app/(models)/user";
 
 const RecipeDetail = async ({ params }) => {
   const id = params.id;
   let recipe = await getRecipe(id);
   recipe = recipe.res;
+
   const ingredients = recipe.ingredients.split("\n").filter(Boolean);
   const process = recipe.recipe.split("\n").filter(Boolean);
+
+  const session = await getServerSession(options);
+
+  const userLikes = await getUser(session?.user?.email);
+  if (!userLikes.res) {
+    const emptyUser = new User({
+      userMail: session?.user?.email,
+      liked: [],
+    });
+
+    emptyUser.save();
+  }
+
   return (
     <div className="p-8">
       <div className="flex items-center gap-4 lg:gap-24 flex-col lg:flex-row pb-4">
@@ -23,9 +39,12 @@ const RecipeDetail = async ({ params }) => {
         <div className="text-center lg:text-start">
           <h1 className="text-3xl lg:text-5xl mb-2">{recipe.name}</h1>
           <p className="text-lg lg:text-xl mb-4">Posted by {recipe.user}</p>
-          <p className="text-lg lg:text-xl text-end lg:text-start">
-            <FavoriteBorderIcon /> {recipe.likes}
-          </p>
+
+          <Like
+            userLikes={userLikes}
+            likes={recipe.likes}
+            recipeId={recipe._id}
+          />
         </div>
       </div>
       <div className="p-4 flex flex-col gap-4">
