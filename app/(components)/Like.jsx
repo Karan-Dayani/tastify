@@ -7,20 +7,15 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 const Like = ({ userLikes, likes, recipeId }) => {
-  const router = useRouter();
   const { data: session } = useSession();
   const likedOrNot = userLikes?.res?.liked.includes(recipeId);
   const handleLike = () => {
     const res = liked(session?.user?.email, recipeId);
-    if (res) {
-      router.refresh();
-    }
+    window.location.reload();
   };
   const handleDislike = () => {
     const res = disliked(session?.user?.email, recipeId);
-    if (res) {
-      router.refresh();
-    }
+    window.location.reload();
   };
   return (
     <>

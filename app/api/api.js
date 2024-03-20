@@ -49,25 +49,25 @@ export const getUser = async (mail) => {
 };
 
 export const disliked = async (mail, id) => {
-  const res = await fetch(
-    `https://tastify-one.vercel.app/api/User/${mail}/${id}`,
-    {
-      method: "DELETE",
-    }
-  );
-  if (res.ok) {
+  const res = await fetch(`http://localhost:3000/api/User/${mail}/${id}`, {
+    method: "DELETE",
+  });
+  const res2 = await fetch(`http://localhost:3000/api/Recipes/${id}/minus`, {
+    method: "POST",
+  });
+  if (res.ok && res2.ok) {
     return true;
   }
 };
 
 export const liked = async (mail, id) => {
-  const res = await fetch(
-    `https://tastify-one.vercel.app/api/User/${mail}/${id}`,
-    {
-      method: "POST",
-    }
-  );
-  if (res.ok) {
+  const res = await fetch(`http://localhost:3000/api/User/${mail}/${id}`, {
+    method: "POST",
+  });
+  const res2 = await fetch(`http://localhost:3000/api/Recipes/${id}/plus`, {
+    method: "POST",
+  });
+  if (res.ok && res2.ok) {
     return true;
   }
 };
